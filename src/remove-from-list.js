@@ -23,9 +23,35 @@ const { NotImplementedError } = require('../extensions/index.js');
  * }
  */
 function removeKFromList(/* l, k */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+  const l = arguments[0];
+  const k = arguments[1];
+  let firstNode = l;
+  let curr = l;
+  let prev;
+
+  while (true) {
+    if (curr.value == k) {
+      if (prev != null) {
+        prev.next = curr.next;
+        curr = curr.next;
+      } else {
+        if ((firstNode = curr)) {
+          firstNode = curr.next;
+        }
+
+        curr = curr.next;
+      }
+    } else {
+      prev = curr;
+      curr = curr.next;
+    }
+
+    if (!curr) break;
+  }
+
+  return firstNode;
 }
+
 
 module.exports = {
   removeKFromList
