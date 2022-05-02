@@ -156,9 +156,14 @@ class BinarySearchTree {
                     return firstNode;
                   }
                 } else if (!prevFindNode) {
+                  console.log("no prev findnode");
                   if (prevtype == -1) {
+                    console.log(lastNode);
+                    console.log(prev);
+                    lastNode.right.left = prev.left;
                     prev.left = lastNode.right;
                   } else {
+                    lastNode.left = prev.left;
                     prev.right = lastNode.right;
                   }
                   return firstNode;
