@@ -7,7 +7,6 @@ const { Node } = require('../extensions/list-tree.js');
 * using Node from extensions
 */
 class BinarySearchTree {
-
   constructor(head = null) {
     this.head = head;
   }
@@ -17,7 +16,6 @@ class BinarySearchTree {
   }
 
   add(data) {
-
     if (!this.head) {
       this.head = new Node(data);
     } else {
@@ -38,11 +36,8 @@ class BinarySearchTree {
         } else {
           break;
         }
-
       }
-
     }
-
   }
 
   has(data) {
@@ -65,10 +60,8 @@ class BinarySearchTree {
           }
         } else {
           return true;
-
         }
       }
-
     }
   }
 
@@ -99,50 +92,110 @@ class BinarySearchTree {
 
   remove(data) {
     if (!this.head) {
-      //return null;
+      return null;
     } else {
       let lastNode = this.head;
-      prev = null;
-      while (true) {
-        if (data == lastNode.data) {
-          if (!prev) {
-            break;
-          } else if (prev.left == lastNode) {
-            prev.left = null;
-          } else {
-            prev.right = null;
-          }
-        } else {
+      let firstNode = this.head;
+      let prev = null;
+      let prevtype = 0;
 
-          while (true) {
-            if (data < lastNode.data) {
-              if (lastNode.left) {
-                prev = lastNode;
-                lastNode = lastNode.left;
-              } else {
-                //return null;
-                break;
-              }
+      while (true) {
+        console.log(lastNode.data);
+        if (data == lastNode.data) {
+          console.log("find");
+          if (!lastNode.left && !lastNode.right) {
+            console.log("no childs");
+            if (prevtype == -1) {
+              prev.left = null;
+              return firstNode;
             } else {
-              if (lastNode.right) {
-                prev = lastNode;
-                lastNode = lastNode.right;
+              prev.right = null;
+              return firstNode;
+            }
+          } else if (!lastNode.right) {
+            console.log("no right");
+            if (prevtype == -1) {
+              prev.left = lastNode.left;
+            } else {
+              prev.right = lastNode.left;
+            }
+            return firstNode;
+          } else {
+            // находим минимум среди правых
+            console.log("looking min from right");
+
+            let findNode = lastNode.right;
+            let prevFindNode = null;
+
+            while (true) {
+              console.log(findNode);
+              console.log(findNode.data);
+
+              if (!findNode.left) {
+                console.log("found min", findNode.data);
+                if (!prev) {
+                  console.log("no prev delete head");
+                  console.log(prevFindNode);
+                  console.log(findNode);
+                  console.log(firstNode.left);
+                  if (!prevFindNode) {
+                    findNode.left = firstNode.left;
+                    this.head = findNode;
+                    console.log(firstNode);
+
+                    return findNode;
+                  } else if (!findNode.right) {
+                    console.log("no right");
+                    prevFindNode.left = null;
+                    firstNode.value = findNode.value;
+                    return firstNode;
+                  } else {
+                    console.log("right is");
+                    firstNode.data = findNode.data;
+                    prevFindNode.left = findNode.right;
+                    return firstNode;
+                  }
+                } else if (!prevFindNode) {
+                  if (prevtype == -1) {
+                    prev.left = lastNode.right;
+                  } else {
+                    prev.right = lastNode.right;
+                  }
+                  return firstNode;
+                } else if (!findNode.right) {
+                  console.log("no right");
+                  prevFindNode.left = null;
+                  prev.value = findNode.value;
+                  return firstNode;
+                } else {
+                  console.log("right is");
+                  lastNode.data = findNode.data;
+                  prevFindNode.left = findNode.right;
+                  return firstNode;
+                }
               } else {
-                //return null;
-                break;
+                prevFindNode = findNode;
+                findNode = findNode.left;
               }
             }
-
-
-
           }
-
-
+        } else if (data < lastNode.data) {
+          if (!lastNode.left) {
+            return lastNode;
+          } else {
+            prevtype = -1;
+            prev = lastNode;
+            lastNode = lastNode.left;
+          }
+        } else {
+          if (!lastNode.right) {
+            return lastNode;
+          } else {
+            prevtype = 1;
+            prev = lastNode;
+            lastNode = lastNode.right;
+          }
         }
-
-
-
-
       }
     }
   }
@@ -160,7 +213,6 @@ class BinarySearchTree {
         }
       }
     }
-
   }
 
   max() {
@@ -176,7 +228,6 @@ class BinarySearchTree {
         }
       }
     }
-
   }
 }
 
